@@ -1,56 +1,50 @@
-import styled from 'styled-components'
 import Head from 'next/head'
-//import ExperienceList from "../components/ExperienceList"
-import Link from 'next/link'
-import Banner from '../components/Banner'
+import styled from "styled-components"
 import Footer from '../components/Footer'
 import ItemCard from '../components/ItemCard'
 import useItems from '../context/ItemContext'
 import useUser from '../context/UserContext'
 
 export default function Home() {
-  const { items: exps, setItems } = useItems()
-  const { user, setUser } = useUser()
-  function addToCart(item){
-      setUser({...user, cart: [...user.cart, item]})
-    }
+  const { user } = useUser()
+  const { items } = useItems()
+
   return (
     <PageWrapper>
       <Head>
-        <title>Home</title>
+        <title>Checkout</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Banner />
-
       <Header>
-        <h1>Start growing, {user.name}</h1>
-        <Link href="/cart" >
+        <h1>Checkout</h1>
           <CartIcon>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             <p>{user.cart.length}</p>
           </CartIcon>
-        </Link>
         </Header>
       <Main>
-        <h2>Shop our Extensive Plant Collection </h2>
-        <Gallery>
-          {
-          exps.map((exp, i) => (
-            <ItemCard
-              key={exp.name}
-              item={exp}
-              addToCart={addToCart}
-            />
-          ))
-          }
-        </Gallery>
+        <Title>Welcome to your cart, {user.name}! Let's get these plants headed your way.</Title>
+        <CartList>
+            {
+                user.cart.map((item) => <CartItem>1 {item.name} - ${item.price}</CartItem>)
+            }
+        </CartList>
+        <Total>
+            Total: ${user.cart.reduce((agg, item) => agg + item.price, 0)}
+        </Total>
+        
       </Main>
       <Footer />
     </PageWrapper>
   )
 }
+
+const Total = styled.h2`
+    font-size: 3rem;
+    font-weight: 700;
+`
 
 const PageWrapper = styled.div`
   display: flex;
@@ -59,20 +53,41 @@ const PageWrapper = styled.div`
   height: 100%;
 `
 
+const Title = styled.h1`
+    font-size: 3rem;
+`
+
+const CartList = styled.ol`
+    list-style: none;
+    padding: 50px 0px;
+`
+const CartItem = styled.li`
+    font-size: 2rem;
+    padding: 10px 0px;
+`
+
 const Main = styled.main`
   padding: 20px 10%;
-  flex: 1;
+
   h2 {
     margin: 0;
-    padding-bottom: 10px;
+    padding: 20px 0px;
   }
 `
+
 
 const Header = styled.header`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 0px 40px;
+`
+
+const Placeholder = styled.div`
+    background: gray;
+    height: 500px;
+    border-radius: 20px;
+    padding: 20px;
 `
 
 const CartIcon = styled.div`

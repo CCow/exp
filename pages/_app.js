@@ -1,7 +1,11 @@
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import styled from "styled-components"
-import { data } from "../lib/data";
+import  data  from "../lib/data";
 import ExperienceList from "../components/ExperienceList"
+import { useState } from "react"
+import { ItemContext } from "../context/ItemContext"
+import { UserContext } from '../context/UserContext'
+
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
     height: 100%;
@@ -47,15 +51,19 @@ const Overlay = styled.div`
   pointer-events: none;
 `
 
-export default function App() {
-  const expList = data;
+export default function App({Component, pageProps}) {
+  const [items, setItems] = useState(data)
+  const [user, setUser] = useState({
+    name: "Mitch",
+    cart: []
+  })
+  //const expList = data;
   return (
-    <AppWrapper>
-
-      <div>
-        <h1> hi </h1>
-      </div>
-      <ExperienceList data={expList} />
-    </AppWrapper>
+    <UserContext.Provider value={{ user, setUser }}>
+    <ItemContext.Provider value={{ items, setItems }}>
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </ItemContext.Provider>
+      </UserContext.Provider>
   );
 }
