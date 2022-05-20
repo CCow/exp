@@ -34,14 +34,7 @@ export default function Home() {
         <Total>
             Total: ${user.cart.reduce((agg, item) => agg + item.price, 0)}
         </Total>
-        <h2>Want a little something extra?</h2>
-        <Gallery>
-            {
-                items.map((exp) =>
-                    <ItemCard item={exp} />
-                )
-            }
-        </Gallery>
+        
       </Main>
       <Footer />
     </PageWrapper>
